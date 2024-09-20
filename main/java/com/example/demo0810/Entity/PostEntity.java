@@ -23,6 +23,8 @@ public class PostEntity {
 
     private String content;
 
+    private String writer;
+
     // 조회수
     private Long count;
 
@@ -33,8 +35,9 @@ public class PostEntity {
     private UserEntity user;
 
     @Builder
-    public PostEntity (String title, String content) {
+    public PostEntity (String title, String content, String writer) {
         this.title = title;
         this.content = content;
+        this.writer = writer;
     }
 }

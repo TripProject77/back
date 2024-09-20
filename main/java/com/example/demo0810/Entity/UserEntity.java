@@ -2,6 +2,8 @@ package com.example.demo0810.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -29,8 +31,10 @@ public class UserEntity {
 
     private String email;
 
+    @CreatedDate
     private LocalDateTime createAt = LocalDateTime.now();
 
+    @LastModifiedDate
     private LocalDateTime updateAt = LocalDateTime.now();
 
     @Builder

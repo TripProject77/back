@@ -114,7 +114,6 @@ public class LoginController {
         System.out.println("Received username: " + username);  // 로그로 확인
 
 
-
         // 요청의 Authorization 헤더에서 JWT 토큰 추출
         String authorizationHeader = request.getHeader("Authorization");
 
@@ -142,6 +141,7 @@ public class LoginController {
         List<UserEntity> user = userService.getAllUser();
         return ResponseEntity.ok(user);
     }
+
 
 
 }
