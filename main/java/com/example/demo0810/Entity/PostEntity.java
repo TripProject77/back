@@ -26,9 +26,11 @@ public class PostEntity {
     private String writer;
 
     // 조회수
-    private Long count;
+    private int count = 0;
 
     private LocalDateTime createAtPost = LocalDateTime.now();
+
+    private LocalDateTime updateAtPost;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="user_id")
@@ -39,5 +41,6 @@ public class PostEntity {
         this.title = title;
         this.content = content;
         this.writer = writer;
+        this.count = 0;
     }
 }
