@@ -1,4 +1,4 @@
-package com.example.demo0810.dto;
+package com.example.demo0810.dto.post;
 
 import com.example.demo0810.Entity.PostEntity;
 import lombok.Builder;

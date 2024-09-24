@@ -1,10 +1,9 @@
-package com.example.demo0810.dto;
+package com.example.demo0810.dto.post;
 
 import com.example.demo0810.Entity.PostEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 

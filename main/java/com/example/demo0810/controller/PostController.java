@@ -2,12 +2,13 @@ package com.example.demo0810.controller;
 
 import com.example.demo0810.Entity.PostEntity;
 import com.example.demo0810.Entity.UserEntity;
-import com.example.demo0810.dto.*;
+import com.example.demo0810.dto.post.PostRequestDto;
+import com.example.demo0810.dto.post.PostResponseDto;
+import com.example.demo0810.dto.post.PostUpdateDto;
 import com.example.demo0810.jwt.JwtUtill;
 import com.example.demo0810.repository.PostRepository;
 import com.example.demo0810.repository.UserRepository;
 import com.example.demo0810.service.PostService;
-import com.example.demo0810.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

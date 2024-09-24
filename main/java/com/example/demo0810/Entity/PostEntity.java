@@ -28,7 +28,12 @@ public class PostEntity {
     // 조회수
     private int count = 0;
 
-    private LocalDateTime createAtPost = LocalDateTime.now();
+    private LocalDateTime createAtPost;
+
+    @PrePersist
+    public void prePersist() {
+        this.createAtPost = LocalDateTime.now();
+    }
 
     private LocalDateTime updateAtPost;
 

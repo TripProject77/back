@@ -1,9 +1,9 @@
 package com.example.demo0810.controller;
 
 import com.example.demo0810.Entity.UserEntity;
-import com.example.demo0810.dto.UserRequestDto;
-import com.example.demo0810.dto.UserResponseDto;
-import com.example.demo0810.dto.UserUpdateDto;
+import com.example.demo0810.dto.user.UserRequestDto;
+import com.example.demo0810.dto.user.UserResponseDto;
+import com.example.demo0810.dto.user.UserUpdateDto;
 import com.example.demo0810.jwt.JwtUtill;
 import com.example.demo0810.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
-public class LoginController {
+public class Controller {
 
     private final UserService userService;
     private final JwtUtill jwtUtill;

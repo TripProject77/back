@@ -1,10 +1,7 @@
 package com.example.demo0810.service;
 
 import com.example.demo0810.Entity.PostEntity;
-import com.example.demo0810.Entity.UserEntity;
-import com.example.demo0810.dto.PostRequestDto;
-import com.example.demo0810.dto.PostUpdateDto;
-import com.example.demo0810.dto.UserUpdateDto;
+import com.example.demo0810.dto.post.PostUpdateDto;
 import com.example.demo0810.exception.CustomException;
 import com.example.demo0810.exception.ErrorCode;
 import com.example.demo0810.repository.PostRepository;
