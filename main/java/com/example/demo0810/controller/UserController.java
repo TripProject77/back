@@ -4,7 +4,10 @@ import com.example.demo0810.Entity.UserEntity;
 import com.example.demo0810.dto.user.UserRequestDto;
 import com.example.demo0810.dto.user.UserResponseDto;
 import com.example.demo0810.dto.user.UserUpdateDto;
+import com.example.demo0810.exception.CustomException;
+import com.example.demo0810.exception.ErrorCode;
 import com.example.demo0810.jwt.JwtUtill;
+import com.example.demo0810.repository.UserRepository;
 import com.example.demo0810.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -15,19 +18,21 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
-public class Controller {
+public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
     private final JwtUtill jwtUtill;
 
     @GetMapping("/")
@@ -44,14 +49,15 @@ public class Controller {
         return "main Controller" + " - " + username + " - " + role;
     }
 
-
+    // 회원 가입
     @PostMapping("/join")
-    public String joinProcess(@RequestBody UserRequestDto userRequestDto) {
+    public void joinProcess(@RequestBody UserRequestDto userRequestDto) {
+
         userService.joinP(userRequestDto);
 
-        return "signup_ok";
     }
 
+    // 사용자 정보 조회
     @Secured("ROLE_USER")
     @GetMapping("/info")
     public ResponseEntity<?> userInfo(HttpServletRequest request) {
@@ -73,10 +79,10 @@ public class Controller {
             String category = jwtUtill.getCategory(token);
             String name = jwtUtill.getName(token);
             String email = jwtUtill.getEmail(token);
-            String password = jwtUtill.getPassword(token);
+            UserEntity user = userRepository.findByUsername(username);
 
             // 사용자 정보 객체 생성 (필요 시 DB에서 사용자 정보 조회)
-            UserResponseDto userInfoResponse = new UserResponseDto(username, role, category, name, email, password);
+            UserResponseDto userInfoResponse = new UserResponseDto(username, role, category, name, email, user.getCreatedDate(), user.getProfileImage());
 
             return new ResponseEntity<>(userInfoResponse, HttpStatus.OK);
         } catch (Exception e) {
@@ -85,59 +91,37 @@ public class Controller {
         }
     }
 
+    // 사용자 정보 수정
     @PostMapping("/update")
-    public ResponseEntity<?> updateUser(HttpServletRequest request, @RequestBody UserUpdateDto userUpdateDto) {
+    public void updateUser(HttpServletRequest request, @RequestBody UserUpdateDto userUpdateDto) {
 
-        String authorizationHeader = request.getHeader("Authorization");
+        userService.updateUser(userUpdateDto, request);
 
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return new ResponseEntity<>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
-        }
-
-        String token = authorizationHeader.substring(7);
-
-        try {
-            String username = jwtUtill.getUsername(token);
-
-            // DB에 저장된 사용자 정보 수정 처리
-            userService.updateUser(username, userUpdateDto);
-            return new ResponseEntity<>("User updated successfully", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error updating user", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
-    @DeleteMapping("/{username}")
-    public ResponseEntity<?> deleteUser(@PathVariable("username") String username, HttpServletRequest request) {
-        System.out.println("Received username: " + username);  // 로그로 확인
+    // 사용자 정보 삭제
+    @DeleteMapping("/delete/{username}")
+    public void deleteUser(@PathVariable("username") String username) {
 
+        System.out.println("Received username: " + username);
 
-        // 요청의 Authorization 헤더에서 JWT 토큰 추출
-        String authorizationHeader = request.getHeader("Authorization");
+        userService.deleteUser(username);
 
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return new ResponseEntity<>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
-        }
-
-        // "Bearer " 제거하여 순수 JWT 토큰만 추출
-        String token = authorizationHeader.substring(7);
-
-        try {
-            // 유저 삭제 서비스 호출
-            userService.deleteUser(username);
-
-            return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
-        } catch (UsernameNotFoundException e) {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error deleting user", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
-    @GetMapping("/AllUser")
-    public ResponseEntity<List<UserEntity>> getUserList() {
-        List<UserEntity> user = userService.getAllUser();
-        return ResponseEntity.ok(user);
+    // 유저 리스트
+    @GetMapping("/userList")
+    public List<UserEntity> getUserList() {
+        return userService.getAllUser();
+    }
+
+    @PostMapping("/{username}/{uploadedImageUrl}/updateImage")
+    public void updateProfileImage(@PathVariable("username") String username, @PathVariable("uploadedImageUrl") String uploadedImageUrl) {
+
+        UserEntity user = userRepository.findByUsername(username);
+
+        user.setProfileImage(uploadedImageUrl);
+        userRepository.save(user);
     }
 }
 

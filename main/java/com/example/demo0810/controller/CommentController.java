@@ -1,78 +1,62 @@
 package com.example.demo0810.controller;
 
 import com.example.demo0810.Entity.CommentEntity;
-import com.example.demo0810.Entity.PostEntity;
-import com.example.demo0810.Entity.UserEntity;
 import com.example.demo0810.dto.comment.CommentRequestDto;
-import com.example.demo0810.jwt.JwtUtill;
-import com.example.demo0810.repository.PostRepository;
-import com.example.demo0810.repository.UserRepository;
+import com.example.demo0810.dto.comment.CommentUpdateDto;
 import com.example.demo0810.service.CommentService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/comment")
 public class CommentController {
 
-    private final UserRepository userRepository;
-    private final PostRepository postRepository;
-    private final JwtUtill jwtUtill;
     private final CommentService commentService;
 
+    // 댓글 작성
+    @PostMapping("/{id}/write")
+    public void commentWrite(@PathVariable("id") Long id, @RequestBody CommentRequestDto commentRequestDto, HttpServletRequest request) {
 
-    @PostMapping("/{id}/comment")
-    public ResponseEntity<String> commentWrite(@PathVariable("id") Long id, @RequestBody CommentRequestDto commentRequestDto, HttpServletRequest request) {
+        commentService.CommentSave(id, commentRequestDto, request);
 
-        String authorizationHeader = request.getHeader("Authorization");
-        String username = null;
-
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return new ResponseEntity<>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
-        }
-
-        String token = authorizationHeader.substring(7);
-
-        try {
-            username = jwtUtill.getUsername(token);
-        } catch (Exception e) {
-            return new ResponseEntity<>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
-        }
-
-        UserEntity user = userRepository.findByUsername(username);
-
-        Optional<PostEntity> post = postRepository.findById(id);
-
-        if (!post.isPresent()) {
-            return new ResponseEntity<>("Post not found", HttpStatus.NOT_FOUND);
-        }
-
-        PostEntity postEntity = post.get();
-
-        CommentEntity commentEntity = commentRequestDto.toComment();
-        commentEntity.setUser(user);
-        commentEntity.setPost(postEntity);
-        commentEntity.setAuthor(username);
-
-        commentService.CommentSave(commentEntity);
-
-        return ResponseEntity.ok("comment_ok");
     }
 
+    @PostMapping("/{postId}/reply/{parentCommentId}")
+    public void replyWrite(@PathVariable("postId") Long postId,
+                           @PathVariable("parentCommentId") Long parentCommentId,
+                           @RequestBody CommentRequestDto commentRequestDto,
+                           HttpServletRequest request) {
 
-    @GetMapping("/AllComment/{id}")
-    public ResponseEntity<List<CommentEntity>> getCommentList(@PathVariable("id") Long id) {
-        List<CommentEntity> comments = commentService.getAllComment(id);
-        return ResponseEntity.ok(comments);
+        commentRequestDto.setParentCommentId(parentCommentId); // 대댓글 설정
+        commentService.CommentSave(postId, commentRequestDto, request); // 동일한 저장 로직 호출
     }
+
+    // 댓글 수정
+    @PostMapping("/{id}/update")
+    public void updateComment(@PathVariable("id") Long id, @RequestBody CommentUpdateDto commentUpdateDto) {
+
+        commentService.updateComment(id, commentUpdateDto);
+
+    }
+
+    // 댓글 삭제
+    @DeleteMapping("/delete/{id}")
+    public void deleteComment(@PathVariable("id") Long id, HttpServletRequest request) {
+
+        commentService.deleteComment(id);
+
+    }
+
+    // 특정 게시물 ID로 댓글 목록 조회
+    @GetMapping("/commentList/{id}")
+    public List<CommentEntity> getCommentList(@PathVariable("id") Long id) {
+        return commentService.getAllComment(id);
+    }
+
 
 }

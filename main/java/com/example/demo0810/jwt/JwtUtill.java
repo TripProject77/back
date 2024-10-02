@@ -4,6 +4,7 @@ import com.example.demo0810.Entity.UserEntity;
 import com.example.demo0810.exception.CustomException;
 import com.example.demo0810.exception.ErrorCode;
 import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ import java.util.Date;
 public class JwtUtill {
 
     private SecretKey secretKey;
+    private HttpServletRequest request;
 
     public JwtUtill(@Value("${spring.jwt.secret}") String secretKey) {
         this.secretKey = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());

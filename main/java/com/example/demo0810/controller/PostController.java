@@ -5,6 +5,8 @@ import com.example.demo0810.Entity.UserEntity;
 import com.example.demo0810.dto.post.PostRequestDto;
 import com.example.demo0810.dto.post.PostResponseDto;
 import com.example.demo0810.dto.post.PostUpdateDto;
+import com.example.demo0810.exception.CustomException;
+import com.example.demo0810.exception.ErrorCode;
 import com.example.demo0810.jwt.JwtUtill;
 import com.example.demo0810.repository.PostRepository;
 import com.example.demo0810.repository.UserRepository;
@@ -31,93 +33,52 @@ public class PostController {
     private final JwtUtill jwtUtill;
     private final UserRepository userRepository;
 
+    // 게시글 작성
     @PostMapping("/write")
-    public ResponseEntity<String> postWrite(@RequestBody PostRequestDto postRequestDto, HttpServletRequest request) {
+    public void postWrite(@RequestBody PostRequestDto postRequestDto, HttpServletRequest request) {
 
-        // 요청의 Authorization 헤더에서 JWT 토큰 추출
-        String authorizationHeader = request.getHeader("Authorization");
-        String username = null;
+        postService.PostSave(postRequestDto, request);
 
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return new ResponseEntity<>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
-        }
-
-        // "Bearer " 제거하여 순수 JWT 토큰만 추출
-        String token = authorizationHeader.substring(7);
-
-        try {
-            username = jwtUtill.getUsername(token);
-        } catch (Exception e) {
-            // 토큰 검증 실패 또는 만료 시
-            return new ResponseEntity<>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
-        }
-
-        UserEntity user = userRepository.findByUsername(username);
-
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
-        }
-
-        PostEntity postEntity = postRequestDto.toPostEntity();
-        postEntity.setUser(user);
-
-        postService.PostSave(postEntity);
-
-        return ResponseEntity.ok("post_ok");
     }
 
-    @GetMapping("/AllPost")
-    public ResponseEntity<List<PostEntity>> getPostList() {
-        List<PostEntity> post = postService.getAllPost();
+    // 게시글 수정
+    @PostMapping("/update")
+    public void updatePost(@RequestBody PostUpdateDto postUpdateDto) {
 
-        return ResponseEntity.ok(post);
+        postService.updatePost(postUpdateDto.getId(), postUpdateDto);
+
     }
 
+    // 게시글 삭제
+    @DeleteMapping("/delete/{id}")
+    public void deletePost(@PathVariable("id") Long id) {
+
+        postService.deletePost(id);
+
+    }
+
+    // 게시글 상세 정보
     @GetMapping("/info/{id}")
-    public ResponseEntity<PostResponseDto> getPostInfo(@PathVariable("id") Long id, HttpServletRequest request) {
+    public PostResponseDto PostInfo(@PathVariable("id") Long id) {
 
         Optional<PostEntity> post = postRepository.findById(id);
-
-        System.out.println(post);
 
         if (post.isPresent()) {
             PostEntity postEntity = post.get();
 
-            PostResponseDto postResponseDto = PostResponseDto.fromEntity(postEntity);
-
             postRepository.updateCount(id);
 
-            return new ResponseEntity<>(postResponseDto, HttpStatus.OK);
+            return new PostResponseDto(postEntity.getId(), postEntity.getTitle(), postEntity.getContent(), postEntity.getWriter(), postEntity.getCount(), postEntity.getCreatedDate(), postEntity.getUpdatedDate());
         } else {
-            return ResponseEntity.notFound().build();
+            throw new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_EXIST_POST);
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePost(@PathVariable("id") Long id, HttpServletRequest request) {
+    // 게시물 리스트
+    @GetMapping("/postList")
+    public List<PostEntity> getPostList() {
 
-        try {
-            postService.deletePost(id);
+        return postService.getAllPost();
 
-            return new ResponseEntity<>("Post deleted successfully", HttpStatus.OK);
-
-        } catch (UsernameNotFoundException e) {
-            return new ResponseEntity<>("Post not found", HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error deleting post", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
-
-    @PostMapping("/update")
-    public ResponseEntity<?> updatePost(HttpServletRequest request, @RequestBody PostUpdateDto postUpdateDto) {
-
-        try {
-            postService.updatePost(postUpdateDto.getId(), postUpdateDto);
-            return new ResponseEntity<>("Post updated successfully", HttpStatus.OK);
-
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error updating post", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
 }

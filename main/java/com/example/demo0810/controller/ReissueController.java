@@ -9,19 +9,18 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
 public class ReissueController {
 
     /*
+        refresh 토큰으로 access 토큰을 재발급 받기 위한 Controller임
+
         refresh 토큰으로 access 토큰을 재발급하고 refresh 토큰도 같이 재발급
         여기서, 재발급 받기 전 refresh 토큰을 사용 금지하게 처리해야 함
     */
@@ -34,6 +33,7 @@ public class ReissueController {
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
 
         String refresh = null;
+
         Cookie[] cookies = request.getCookies();
 
         for (Cookie c : cookies) {

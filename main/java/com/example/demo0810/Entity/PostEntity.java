@@ -6,14 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
-@Table(name="board")
+@Table(name = "board")
 @Entity
-public class PostEntity {
+public class PostEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,24 +26,20 @@ public class PostEntity {
     // 조회수
     private int count = 0;
 
-    private LocalDateTime createAtPost;
-
-    @PrePersist
-    public void prePersist() {
-        this.createAtPost = LocalDateTime.now();
-    }
-
-    private LocalDateTime updateAtPost;
-
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 
     @Builder
-    public PostEntity (String title, String content, String writer) {
+    public PostEntity(String title, String content, String writer) {
         this.title = title;
         this.content = content;
         this.writer = writer;
         this.count = 0;
+    }
+
+    public void updatePost(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 }

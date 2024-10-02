@@ -2,16 +2,19 @@ package com.example.demo0810.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="comment")
+@Table(name = "comment")
 @Entity
-public class CommentEntity {
+public class CommentEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,17 +27,24 @@ public class CommentEntity {
     private String author;
 
     @ManyToOne
-    @JoinColumn(name="post_id")
+    @JoinColumn(name = "post_id", nullable = false)
     private PostEntity post;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    private LocalDateTime createAtComment;
+    // 부모 댓글과의 관계 (ManyToOne)
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "parent_comment_id")
+    private CommentEntity parentComment;
 
-    @PrePersist
-    public void prePersist() {
-        this.createAtComment = LocalDateTime.now();
+    // 대댓글 목록 (OneToMany)
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
+    private List<CommentEntity> replies = new ArrayList<>();
+
+    // 댓글 수정 메서드
+    public void CommentUpdate(String comment) {
+        this.comment = comment;
     }
 }

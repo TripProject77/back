@@ -19,13 +19,16 @@ public class UserRequestDto {
 
     private String email;
 
+    private String category;
+
     @Builder
-    public UserRequestDto(String username, String password, String role, String name, String email) {
+    public UserRequestDto(String username, String password, String role, String name, String email, String category) {
         this.username = username;
         this.password = password;
         this.role = role;
         this.name = name;
         this.email = email;
+        this.category = category;
     }
 
     public UserEntity toEntity() {
@@ -35,6 +38,7 @@ public class UserRequestDto {
                 .role(role)
                 .name(name)
                 .email(email)
+                .category(category)
                 .build();
     }
 }

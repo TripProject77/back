@@ -14,7 +14,6 @@ public class UserUpdateDto {
 
     private String name;
     private String email;
-    private LocalDateTime updateAtPost = LocalDateTime.now();
 
     public UserEntity UpdateUserEntity() {
         return UserEntity.builder()

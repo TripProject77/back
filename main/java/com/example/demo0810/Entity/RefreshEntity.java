@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class RefreshEntity {
+public class RefreshEntity extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,5 +20,4 @@ public class RefreshEntity {
     private String refresh;
 
     private String expiration;
-    private LocalDateTime createAt = LocalDateTime.now();
 }

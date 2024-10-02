@@ -1,10 +1,10 @@
 package com.example.demo0810.dto.user;
 
-import com.example.demo0810.Entity.UserEntity;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -16,5 +16,6 @@ public class UserResponseDto {
     private String category;
     private String name;
     private String email;
-    private String password;
+    private LocalDateTime createdDate;
+    private String profileImage;
 }
