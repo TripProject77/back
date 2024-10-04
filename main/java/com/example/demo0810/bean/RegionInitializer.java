@@ -20,11 +20,8 @@ public class RegionInitializer implements ApplicationRunner {
     @Value("${resources.location}")
     private String resourceLocation;
 
-    // DB와의 상호작용
     private final EntityManager entityManager;
 
-    // 메서드 내의 모든 DB 작업이 하나의 트랜잭션으로 처리됨
-    // 오류가 발생하면 모든 변경 사항 롤백
     @Override
     @Transactional
     public void run(ApplicationArguments args) throws Exception {
@@ -38,9 +35,6 @@ public class RegionInitializer implements ApplicationRunner {
                 String[] splits = line.split(",");
                 Long id = Long.parseLong(splits[0]);
 
-                // find를 사용하여 해당 ID Region 엔티티가 이미 존재하는지 확인
-                // 존재하지 않으면 새로운 Region을 생성하고 persist 메서드를 호출하여 DB에 저장
-                // 이미 존재하는 경우 경고 로그 출력
                 if (entityManager.find(Region.class, id) == null) {
                     entityManager.persist(new Region(
                             id,

@@ -123,4 +123,12 @@ public class UserService {
 
         return cookie;
     }
+
+    public void updateUserProfileImage(String username, String imagePath) {
+        UserEntity user = userRepository.findByUsername(username);
+        if (user != null) {
+            user.setProfileImage(imagePath); // 프로필 이미지 경로 설정
+            userRepository.save(user); // 사용자 정보 업데이트
+        }
+    }
 }
