@@ -6,6 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -23,6 +28,14 @@ public class PostEntity extends BaseTimeEntity {
 
     private String writer;
 
+    private String mbti;
+
+    private String place;
+
+    private LocalDate startDate;
+
+    private LocalDate endDate;
+
     // 조회수
     private int count = 0;
 
@@ -31,11 +44,15 @@ public class PostEntity extends BaseTimeEntity {
     private UserEntity user;
 
     @Builder
-    public PostEntity(String title, String content, String writer) {
+    public PostEntity(String title, String content, String writer, String mbti, String place, LocalDate startDate, LocalDate endDate) {
         this.title = title;
         this.content = content;
         this.writer = writer;
         this.count = 0;
+        this.mbti = mbti;
+        this.place = place;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public void updatePost(String title, String content) {
