@@ -43,8 +43,6 @@ public class RegionInitializer implements ApplicationRunner {
                             Integer.parseInt(splits[3]),
                             Integer.parseInt(splits[4])
                     ));
-                } else {
-                    log.warn("ID {}를 가진 Region이 이미 존재합니다. 건너뜁니다.", id);
                 }
             }
             log.info("Region 데이터가 성공적으로 초기화되었습니다.");

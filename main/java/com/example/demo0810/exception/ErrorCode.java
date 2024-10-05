@@ -24,8 +24,9 @@ public enum ErrorCode {
 
     NOT_CORRECT_PASSWORD("004_NOT_CORRECT_PASSWORD", "비밀번호가 맞지 않습니다."),
 
-    UNATHORIZATION("006_UNATHORIZATION", "인증되지 않아습니다.");
+    UNATHORIZATION("006_UNATHORIZATION", "인증되지 않아습니다."),
 
+    INVALID_DATE_FORMAT("INVALID_DATE_FORMAT", "잘못된 날짜 변환");
 
     private final String errorCode;
 
