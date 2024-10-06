@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,5 +22,11 @@ public class PostResponseDto {
     private int count;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
+    private String mbti;
+    private String place;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private List<String> hashtags;  // 해시태그 리스트 추가
+
 }
 

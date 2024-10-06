@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequestMapping("/post")
 @RequiredArgsConstructor
@@ -68,7 +69,12 @@ public class PostController {
 
             postRepository.updateCount(id);
 
-            return new PostResponseDto(postEntity.getId(), postEntity.getTitle(), postEntity.getContent(), postEntity.getWriter(), postEntity.getCount(), postEntity.getCreatedDate(), postEntity.getUpdatedDate());
+            List<String> hashtags = postEntity.getPostTagMaps().stream()
+                    .map(postTagMap -> postTagMap.getTag().getTagContent())
+                    .collect(Collectors.toList());
+
+            return new PostResponseDto(postEntity.getId(), postEntity.getTitle(), postEntity.getContent(), postEntity.getWriter(), postEntity.getCount()
+                    , postEntity.getCreatedDate(), postEntity.getUpdatedDate(), postEntity.getMbti(), postEntity.getPlace(), postEntity.getStartDate(), postEntity.getEndDate(), hashtags);
         } else {
             throw new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_EXIST_POST);
         }

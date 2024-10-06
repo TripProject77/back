@@ -36,6 +36,9 @@ public class PostEntity extends BaseTimeEntity {
 
     private LocalDate endDate;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PostTagMap> postTagMaps = new ArrayList<>();  // 태그와의 매핑 추가
+
     // 조회수
     private int count = 0;
 

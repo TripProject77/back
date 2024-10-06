@@ -26,7 +26,7 @@ public class PostTagMap {
     @JsonBackReference
     private PostEntity post;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tag_id")
     private Tag tag;
 }
