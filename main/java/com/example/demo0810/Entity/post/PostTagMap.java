@@ -1,8 +1,7 @@
-package com.example.demo0810.Entity;
+package com.example.demo0810.Entity.post;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

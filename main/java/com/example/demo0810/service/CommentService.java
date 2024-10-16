@@ -1,16 +1,16 @@
 package com.example.demo0810.service;
 
 import com.example.demo0810.Entity.CommentEntity;
-import com.example.demo0810.Entity.PostEntity;
-import com.example.demo0810.Entity.UserEntity;
+import com.example.demo0810.Entity.post.PostEntity;
+import com.example.demo0810.Entity.user.UserEntity;
 import com.example.demo0810.dto.comment.CommentRequestDto;
 import com.example.demo0810.dto.comment.CommentUpdateDto;
 import com.example.demo0810.exception.CustomException;
 import com.example.demo0810.exception.ErrorCode;
 import com.example.demo0810.jwt.JwtUtill;
 import com.example.demo0810.repository.CommentRepository;
-import com.example.demo0810.repository.PostRepository;
-import com.example.demo0810.repository.UserRepository;
+import com.example.demo0810.repository.post.PostRepository;
+import com.example.demo0810.repository.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -1,18 +1,9 @@
 package com.example.demo0810.jwt;
 
-import com.example.demo0810.Entity.UserEntity;
-import com.example.demo0810.exception.CustomException;
-import com.example.demo0810.exception.ErrorCode;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;

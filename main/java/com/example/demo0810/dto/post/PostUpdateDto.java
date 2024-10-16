@@ -1,11 +1,8 @@
 package com.example.demo0810.dto.post;
 
-import com.example.demo0810.Entity.PostEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor

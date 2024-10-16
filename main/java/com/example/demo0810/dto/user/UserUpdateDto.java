@@ -1,11 +1,9 @@
 package com.example.demo0810.dto.user;
 
-import com.example.demo0810.Entity.UserEntity;
+import com.example.demo0810.Entity.user.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor

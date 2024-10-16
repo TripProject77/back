@@ -1,8 +1,8 @@
 package com.example.demo0810.service;
 
-import com.example.demo0810.Entity.UserEntity;
+import com.example.demo0810.Entity.user.UserEntity;
 import com.example.demo0810.dto.CustomUserDetails;
-import com.example.demo0810.repository.UserRepository;
+import com.example.demo0810.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

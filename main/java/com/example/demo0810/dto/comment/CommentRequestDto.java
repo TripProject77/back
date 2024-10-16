@@ -1,8 +1,8 @@
 package com.example.demo0810.dto.comment;
 
 import com.example.demo0810.Entity.CommentEntity;
-import com.example.demo0810.Entity.PostEntity;
-import com.example.demo0810.Entity.UserEntity;
+import com.example.demo0810.Entity.post.PostEntity;
+import com.example.demo0810.Entity.user.UserEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
 package com.example.demo0810.jwt;
 
-import com.example.demo0810.Entity.UserEntity;
+import com.example.demo0810.Entity.user.UserEntity;
 import com.example.demo0810.dto.CustomUserDetails;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -12,10 +12,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-import javax.sound.midi.Soundbank;
+
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Writer;
 
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
