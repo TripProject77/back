@@ -1,5 +1,7 @@
 package com.example.demo0810.Entity;
 
+import com.example.demo0810.Entity.post.PostEntity;
+import com.example.demo0810.Entity.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.ArrayList;

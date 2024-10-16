@@ -1,8 +1,7 @@
 package com.example.demo0810.dto.post;
 
-import com.example.demo0810.Entity.ImageEntity;
-import com.example.demo0810.Entity.PostEntity;
-import com.example.demo0810.Entity.PostImageEntity;
+import com.example.demo0810.Entity.post.PostEntity;
+import com.example.demo0810.Entity.post.PostImageEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -34,9 +32,11 @@ public class PostRequestDto {
 
     private int people;
 
+    private String postCategory;
+
 
     @Builder
-    public PostRequestDto(String title, String content, String writer, String mbti, String place, LocalDate startDate, LocalDate endDate, List<String> tags, String postImageUrl, int people) {
+    public PostRequestDto(String title, String content, String writer, String mbti, String place, LocalDate startDate, LocalDate endDate, List<String> tags, String postImageUrl, int people, String postCategory) {
         this.title = title;
         this.content = content;
         this.writer = writer;
@@ -47,6 +47,7 @@ public class PostRequestDto {
         this.tags = tags;
         this.postImageUrl = postImageUrl;
         this.people = people;
+        this.postCategory = postCategory;
     }
 
     // PostEntity로 변환 메서드 수정
@@ -70,6 +71,7 @@ public class PostRequestDto {
                 .endDate(endDate)
                 .postImage(postImageEntity)
                 .people(people)
+                .postCategory(postCategory)
                 .build();
         return post;
     }

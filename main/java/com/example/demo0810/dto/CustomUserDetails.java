@@ -1,6 +1,6 @@
 package com.example.demo0810.dto;
 
-import com.example.demo0810.Entity.UserEntity;
+import com.example.demo0810.Entity.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

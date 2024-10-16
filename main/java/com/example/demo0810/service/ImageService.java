@@ -1,32 +1,27 @@
 package com.example.demo0810.service;
 
 import com.example.demo0810.Entity.ImageEntity;
-import com.example.demo0810.Entity.PostEntity;
-import com.example.demo0810.Entity.PostImageEntity;
-import com.example.demo0810.Entity.UserEntity;
+import com.example.demo0810.Entity.post.PostEntity;
+import com.example.demo0810.Entity.post.PostImageEntity;
+import com.example.demo0810.Entity.user.UserEntity;
 import com.example.demo0810.dto.ImageResponseDto;
 import com.example.demo0810.dto.ImageUploadDto;
 import com.example.demo0810.exception.CustomException;
 import com.example.demo0810.exception.ErrorCode;
 import com.example.demo0810.repository.ImageRepository;
-import com.example.demo0810.repository.PostImageRepository;
-import com.example.demo0810.repository.PostRepository;
-import com.example.demo0810.repository.UserRepository;
+import com.example.demo0810.repository.post.PostImageRepository;
+import com.example.demo0810.repository.post.PostRepository;
+import com.example.demo0810.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

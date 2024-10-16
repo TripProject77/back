@@ -1,14 +1,11 @@
 package com.example.demo0810.controller;
 
-import com.example.demo0810.Entity.UserEntity;
-import com.example.demo0810.dto.ImageResponseDto;
+import com.example.demo0810.Entity.user.UserEntity;
 import com.example.demo0810.dto.user.UserRequestDto;
 import com.example.demo0810.dto.user.UserResponseDto;
 import com.example.demo0810.dto.user.UserUpdateDto;
-import com.example.demo0810.exception.CustomException;
-import com.example.demo0810.exception.ErrorCode;
 import com.example.demo0810.jwt.JwtUtill;
-import com.example.demo0810.repository.UserRepository;
+import com.example.demo0810.repository.user.UserRepository;
 import com.example.demo0810.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor

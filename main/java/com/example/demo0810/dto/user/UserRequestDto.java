@@ -1,7 +1,7 @@
 package com.example.demo0810.dto.user;
 
 import com.example.demo0810.Entity.ImageEntity;
-import com.example.demo0810.Entity.UserEntity;
+import com.example.demo0810.Entity.user.UserEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

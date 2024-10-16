@@ -1,22 +1,19 @@
 package com.example.demo0810.controller;
 
-import com.example.demo0810.Entity.PostEntity;
-import com.example.demo0810.Entity.UserEntity;
+import com.example.demo0810.Entity.post.PostEntity;
 import com.example.demo0810.dto.post.PostRequestDto;
 import com.example.demo0810.dto.post.PostResponseDto;
 import com.example.demo0810.dto.post.PostUpdateDto;
 import com.example.demo0810.exception.CustomException;
 import com.example.demo0810.exception.ErrorCode;
 import com.example.demo0810.jwt.JwtUtill;
-import com.example.demo0810.repository.PostRepository;
-import com.example.demo0810.repository.UserRepository;
+import com.example.demo0810.repository.post.PostRepository;
+import com.example.demo0810.repository.user.UserRepository;
 import com.example.demo0810.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -82,7 +79,7 @@ public class PostController {
                     : defaultImagePath;
 
             return new PostResponseDto(postEntity.getId(), postEntity.getTitle(), postEntity.getContent(), postEntity.getWriter(), postEntity.getCount()
-                    , postEntity.getCreatedDate(), postEntity.getUpdatedDate(), postEntity.getMbti(), postEntity.getPlace(), postEntity.getStartDate(), postEntity.getEndDate(), hashtags, postImageUrl, postEntity.getPeople());
+                    , postEntity.getCreatedDate(), postEntity.getUpdatedDate(), postEntity.getMbti(), postEntity.getPlace(), postEntity.getStartDate(), postEntity.getEndDate(), hashtags, postImageUrl, postEntity.getPeople(), postEntity.getPostCategory());
         } else {
             throw new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_EXIST_POST);
         }

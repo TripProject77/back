@@ -1,5 +1,7 @@
-package com.example.demo0810.Entity;
+package com.example.demo0810.Entity.user;
 
+import com.example.demo0810.Entity.BaseTimeEntity;
+import com.example.demo0810.Entity.ImageEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;

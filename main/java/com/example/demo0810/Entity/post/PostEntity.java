@@ -1,5 +1,7 @@
-package com.example.demo0810.Entity;
+package com.example.demo0810.Entity.post;
 
+import com.example.demo0810.Entity.BaseTimeEntity;
+import com.example.demo0810.Entity.user.UserEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,7 +10,6 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,8 +54,10 @@ public class PostEntity extends BaseTimeEntity {
 
     private int people;
 
+    private String postCategory;
+
     @Builder
-    public PostEntity(String title, String content, String writer, String mbti, String place, LocalDate startDate, LocalDate endDate, PostImageEntity postImage, int people) {
+    public PostEntity(String title, String content, String writer, String mbti, String place, LocalDate startDate, LocalDate endDate, PostImageEntity postImage, int people, String postCategory) {
         this.title = title;
         this.content = content;
         this.writer = writer;
@@ -65,6 +68,7 @@ public class PostEntity extends BaseTimeEntity {
         this.endDate = endDate;
         this.postImage = postImage;
         this.people = people;
+        this.postCategory = postCategory;
     }
 
     public void updatePost(String title, String content) {

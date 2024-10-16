@@ -1,14 +1,14 @@
 package com.example.demo0810.service;
 
 import com.example.demo0810.Entity.RefreshEntity;
-import com.example.demo0810.Entity.UserEntity;
+import com.example.demo0810.Entity.user.UserEntity;
 import com.example.demo0810.dto.user.UserRequestDto;
 import com.example.demo0810.dto.user.UserUpdateDto;
 import com.example.demo0810.exception.CustomException;
 import com.example.demo0810.exception.ErrorCode;
 import com.example.demo0810.jwt.JwtUtill;
 import com.example.demo0810.repository.RefreshRepository;
-import com.example.demo0810.repository.UserRepository;
+import com.example.demo0810.repository.user.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

@@ -1,8 +1,6 @@
 package com.example.demo0810.dto.post;
 
-import com.example.demo0810.Entity.PostEntity;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -29,6 +27,7 @@ public class PostResponseDto {
     private List<String> hashtags;  // 해시태그 리스트 추가
     private String postImageUrl;
     private int people;
+    private String postCategory;
 
 }
 
