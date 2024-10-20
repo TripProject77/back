@@ -30,7 +30,10 @@ public enum ErrorCode {
 
     FILE_SAVE_FAILED("FILE_SAVE_FAILED", "파일 저장 실패"),
 
-    FILE_UPLOAD_FAILED("FILE_UPLOAD_FAILED", "파일 업로드 실패");
+    FILE_UPLOAD_FAILED("FILE_UPLOAD_FAILED", "파일 업로드 실패"),
+
+    PARTICIPATION_FAILED("PARTICIPATION_FAILED", "참여 실패");
+
 
     private final String errorCode;
 

@@ -2,6 +2,7 @@ package com.example.demo0810.Entity.post;
 
 import com.example.demo0810.Entity.BaseTimeEntity;
 import com.example.demo0810.Entity.user.UserEntity;
+import com.example.demo0810.exception.CustomException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -56,6 +57,9 @@ public class PostEntity extends BaseTimeEntity {
 
     private String postCategory;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PostPartiMap> postPartiMap = new ArrayList<>();
+
     @Builder
     public PostEntity(String title, String content, String writer, String mbti, String place, LocalDate startDate, LocalDate endDate, PostImageEntity postImage, int people, String postCategory) {
         this.title = title;
@@ -75,4 +79,6 @@ public class PostEntity extends BaseTimeEntity {
         this.title = title;
         this.content = content;
     }
+
+
 }

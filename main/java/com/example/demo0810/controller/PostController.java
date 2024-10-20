@@ -1,6 +1,7 @@
 package com.example.demo0810.controller;
 
 import com.example.demo0810.Entity.post.PostEntity;
+import com.example.demo0810.Entity.user.UserEntity;
 import com.example.demo0810.dto.post.PostRequestDto;
 import com.example.demo0810.dto.post.PostResponseDto;
 import com.example.demo0810.dto.post.PostUpdateDto;
@@ -14,6 +15,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -71,6 +75,10 @@ public class PostController {
                     .map(postTagMap -> postTagMap.getTag().getTagContent())
                     .collect(Collectors.toList());
 
+            List<String> participation = postEntity.getPostPartiMap().stream()
+                    .map(postPartiMap -> postPartiMap.getParticipation().getParticipationName())
+                    .collect(Collectors.toList());
+
             String defaultImagePath = "C:\\Users\\PARK TH\\AppData\\Local\\Temp\\tomcat.8080.17598021890391925618\\work\\Tomcat\\localhost\\ROOT\\profileImages\\basic.png";
 
             // 프로필 이미지가 없으면 기본 경로로 설정
@@ -79,7 +87,7 @@ public class PostController {
                     : defaultImagePath;
 
             return new PostResponseDto(postEntity.getId(), postEntity.getTitle(), postEntity.getContent(), postEntity.getWriter(), postEntity.getCount()
-                    , postEntity.getCreatedDate(), postEntity.getUpdatedDate(), postEntity.getMbti(), postEntity.getPlace(), postEntity.getStartDate(), postEntity.getEndDate(), hashtags, postImageUrl, postEntity.getPeople(), postEntity.getPostCategory());
+                    , postEntity.getCreatedDate(), postEntity.getUpdatedDate(), postEntity.getMbti(), postEntity.getPlace(), postEntity.getStartDate(), postEntity.getEndDate(), hashtags, postImageUrl, postEntity.getPeople(), postEntity.getPostCategory(), participation);
         } else {
             throw new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_EXIST_POST);
         }
@@ -92,4 +100,22 @@ public class PostController {
         return postService.getAllPost();
 
     }
+
+    @Transactional
+    @PostMapping("/{postId}/participate")
+    public void participate(@PathVariable("postId") Long postId, HttpServletRequest request) {
+
+        String authorizationHeader = request.getHeader("Authorization");
+
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            throw new CustomException(HttpStatus.UNAUTHORIZED, ErrorCode.UNATHORIZATION);
+        }
+
+        String token = authorizationHeader.substring(7);
+
+        String username = jwtUtill.getUsername(token);
+
+        postService.addParticipation(postId, username);
+    }
+
 }
