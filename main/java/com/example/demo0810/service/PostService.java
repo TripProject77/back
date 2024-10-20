@@ -1,17 +1,13 @@
 package com.example.demo0810.service;
 
-import com.example.demo0810.Entity.post.PostEntity;
-import com.example.demo0810.Entity.post.PostTagMap;
-import com.example.demo0810.Entity.post.Tag;
+import com.example.demo0810.Entity.post.*;
 import com.example.demo0810.Entity.user.UserEntity;
 import com.example.demo0810.dto.post.PostRequestDto;
 import com.example.demo0810.dto.post.PostUpdateDto;
 import com.example.demo0810.exception.CustomException;
 import com.example.demo0810.exception.ErrorCode;
 import com.example.demo0810.jwt.JwtUtill;
-import com.example.demo0810.repository.post.PostRepository;
-import com.example.demo0810.repository.post.PostTagMapRepository;
-import com.example.demo0810.repository.post.TagRepository;
+import com.example.demo0810.repository.post.*;
 import com.example.demo0810.repository.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +30,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final TagRepository tagRepository;  // 태그 저장을 위한 리포지토리
     private final PostTagMapRepository postTagMapRepository;  // PostTagMap 저장 리포지토리
+    private final ParticipationRepository participationRepository;
+    private final PostPariRepository postPariRepository;
     private final JwtUtill jwtUtill;
 
     // 게시글 작성
@@ -74,7 +72,7 @@ public class PostService {
         // 태그 처리 및 PostTagMap 저장
         if (postRequestDto.getTags() != null && !postRequestDto.getTags().isEmpty()) {
             for (String tagContent : postRequestDto.getTags()) {
-                // 태그가 존재하는지 확인하고 없으면 새로 생성
+
                 Tag tag = tagRepository.findByTagContent(tagContent)
                         .orElseGet(() -> {
                             Tag newTag = new Tag();
@@ -154,4 +152,35 @@ public class PostService {
 
         return postRepository.findAll();
     }
+
+    public void addParticipation(Long postId, String username) {
+
+        PostEntity post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_EXIST_POST));
+
+        // 이미 있는 유저인지 확인
+        boolean alreadyParticipated = post.getPostPartiMap().stream()
+                .anyMatch(partiMap -> partiMap.getParticipation().getParticipationName().equals(username));
+
+        if (alreadyParticipated) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.PARTICIPATION_FAILED);
+        } else if (post.getPostTagMaps().size() >= post.getPeople()) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.PARTICIPATION_FAILED);
+        }
+
+        Participation participation = participationRepository.findByParticipationName(username)
+                .orElseGet(() -> {
+                    Participation newParticipation = new Participation();
+                    newParticipation.setParticipationName(username);
+                    return participationRepository.save(newParticipation);
+                });
+
+        PostPartiMap postPartiMap = new PostPartiMap();
+        postPartiMap.setPost(post);
+        postPartiMap.setParticipation(participation);
+
+        postPariRepository.save(postPartiMap);
+    }
+
+
 }

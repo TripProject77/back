@@ -34,9 +34,10 @@ public class PostRequestDto {
 
     private String postCategory;
 
+    private List<String> participationPeople;
 
     @Builder
-    public PostRequestDto(String title, String content, String writer, String mbti, String place, LocalDate startDate, LocalDate endDate, List<String> tags, String postImageUrl, int people, String postCategory) {
+    public PostRequestDto(String title, String content, String writer, String mbti, String place, LocalDate startDate, LocalDate endDate, List<String> tags, String postImageUrl, int people, String postCategory, List<String> participationPeople) {
         this.title = title;
         this.content = content;
         this.writer = writer;
@@ -48,6 +49,7 @@ public class PostRequestDto {
         this.postImageUrl = postImageUrl;
         this.people = people;
         this.postCategory = postCategory;
+        this.participationPeople = participationPeople;
     }
 
     // PostEntity로 변환 메서드 수정

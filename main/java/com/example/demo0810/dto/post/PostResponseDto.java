@@ -28,6 +28,6 @@ public class PostResponseDto {
     private String postImageUrl;
     private int people;
     private String postCategory;
-
+    private List<String> participation;
 }
 
