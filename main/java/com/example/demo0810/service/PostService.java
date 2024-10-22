@@ -3,6 +3,7 @@ package com.example.demo0810.service;
 import com.example.demo0810.Entity.post.*;
 import com.example.demo0810.Entity.user.UserEntity;
 import com.example.demo0810.dto.post.PostRequestDto;
+import com.example.demo0810.dto.post.PostFreeUpdateDto;
 import com.example.demo0810.dto.post.PostUpdateDto;
 import com.example.demo0810.exception.CustomException;
 import com.example.demo0810.exception.ErrorCode;
@@ -31,7 +32,7 @@ public class PostService {
     private final TagRepository tagRepository;  // 태그 저장을 위한 리포지토리
     private final PostTagMapRepository postTagMapRepository;  // PostTagMap 저장 리포지토리
     private final ParticipationRepository participationRepository;
-    private final PostPariRepository postPariRepository;
+    private final PostPartiRepository postPartiRepository;
     private final JwtUtill jwtUtill;
 
     // 게시글 작성
@@ -57,7 +58,6 @@ public class PostService {
             String imageUrl = saveFile(file);  // 파일을 저장하고 경로 반환
             postRequestDto.setPostImageUrl(imageUrl); // 이미지 URL 저장
         }
-
 
         // PostEntity 저장
         PostEntity post = postRequestDto.toPostEntity();
@@ -120,7 +120,7 @@ public class PostService {
 
     // 게시글 수정
     @Transactional
-    public void updatePost(Long id, PostUpdateDto postUpdateDto) {
+    public void updateFreePost(Long id, PostFreeUpdateDto postFreeUpdateDto, MultipartFile file) {
 
         Optional<PostEntity> postUpdate = postRepository.findById(id);
 
@@ -128,7 +128,31 @@ public class PostService {
                 new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_EXIST_POST)
         );
 
-        post.updatePost(postUpdateDto.getTitle(), postUpdateDto.getContent());
+        if (file != null && !file.isEmpty()) {
+            String imageUrl = saveFile(file);  // 파일을 저장하고 경로 반환
+            postFreeUpdateDto.setPostImageUrl(imageUrl); // 이미지 URL 저장
+        }
+
+        post.updateFreePost(postFreeUpdateDto.getTitle(), postFreeUpdateDto.getContent(), postFreeUpdateDto.getPostImageUrl());
+
+        postRepository.save(post);
+    }
+
+    @Transactional
+    public void updatePost(Long id, PostUpdateDto postUpdateDto, MultipartFile file) {
+
+        Optional<PostEntity> postUpdate = postRepository.findById(id);
+
+        PostEntity post = postUpdate.orElseThrow(() ->
+                new CustomException(HttpStatus.BAD_REQUEST, ErrorCode.NOT_EXIST_POST)
+        );
+
+        if (file != null && !file.isEmpty()) {
+            String imageUrl = saveFile(file);  // 파일을 저장하고 경로 반환
+            postUpdateDto.setPostImageUrl(imageUrl); // 이미지 URL 저장
+        }
+
+        post.updatePost(postUpdateDto.getStartDate(), postUpdateDto.getEndDate(), postUpdateDto.getTitle(), postUpdateDto.getContent(),postUpdateDto.getMbti(), postUpdateDto.getPlace(), postUpdateDto.getPostImageUrl());
 
         postRepository.save(post);
     }
@@ -179,8 +203,22 @@ public class PostService {
         postPartiMap.setPost(post);
         postPartiMap.setParticipation(participation);
 
-        postPariRepository.save(postPartiMap);
+        postPartiRepository.save(postPartiMap);
     }
 
+    @Transactional
+    public void participationCancel(Long postId, String username) {
 
+        PostEntity post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, ErrorCode.NOT_EXIST_POST));
+
+        PostPartiMap targetPartiMap = post.getPostPartiMap().stream()
+                .filter(partiMap -> partiMap.getParticipation().getParticipationName().equals(username))
+                .findFirst()
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, ErrorCode.PARTICIPATION_FAILED));
+
+        post.getPostPartiMap().remove(targetPartiMap);
+
+        postPartiRepository.delete(targetPartiMap);
+    }
 }

@@ -9,6 +9,4 @@ import java.util.Optional;
 public interface ParticipationRepository extends JpaRepository<Participation, Long> {
 
     Optional<Participation> findByParticipationName(String participationName);
-
-
 }
