@@ -1,9 +1,9 @@
 package com.example.demo0810.controller;
 
 import com.example.demo0810.Entity.post.PostEntity;
-import com.example.demo0810.Entity.user.UserEntity;
 import com.example.demo0810.dto.post.PostRequestDto;
 import com.example.demo0810.dto.post.PostResponseDto;
+import com.example.demo0810.dto.post.PostFreeUpdateDto;
 import com.example.demo0810.dto.post.PostUpdateDto;
 import com.example.demo0810.exception.CustomException;
 import com.example.demo0810.exception.ErrorCode;
@@ -15,8 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,11 +42,19 @@ public class PostController {
 
     }
 
-    // 게시글 수정
-    @PostMapping("/update")
-    public void updatePost(@RequestBody PostUpdateDto postUpdateDto) {
+    // 자유 게시글 수정
+    @PostMapping("/free/update/{postId}")
+    public void updateFreePost(@PathVariable("postId") Long postId, @RequestPart("postUpdateData") PostFreeUpdateDto postFreeUpdateDto, @RequestPart("file") MultipartFile file) {
 
-        postService.updatePost(postUpdateDto.getId(), postUpdateDto);
+        postService.updateFreePost(postId, postFreeUpdateDto, file);
+
+    }
+
+    // 동행 게시글 수정
+    @PostMapping("/update/{postId}")
+    public void updatePost(@PathVariable("postId") Long postId, @RequestPart("postUpdateData") PostUpdateDto postUpdateDto, @RequestPart("file") MultipartFile file) {
+
+        postService.updatePost(postId, postUpdateDto, file);
 
     }
 
@@ -118,4 +124,20 @@ public class PostController {
         postService.addParticipation(postId, username);
     }
 
+    @DeleteMapping("/delete/participate/{id}")
+    public void participationCancel(@PathVariable("id") Long id, HttpServletRequest request) {
+
+        String authorizationHeader = request.getHeader("Authorization");
+
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            throw new CustomException(HttpStatus.UNAUTHORIZED, ErrorCode.UNATHORIZATION);
+        }
+
+        String token = authorizationHeader.substring(7);
+
+        String username = jwtUtill.getUsername(token);
+
+        postService.participationCancel(id, username);
+
+    }
 }

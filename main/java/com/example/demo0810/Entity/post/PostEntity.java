@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,10 +76,26 @@ public class PostEntity extends BaseTimeEntity {
         this.postCategory = postCategory;
     }
 
-    public void updatePost(String title, String content) {
+    public void updateFreePost(String title, String content, String postImageUrl) {
         this.title = title;
         this.content = content;
+
+        if (postImageUrl != null && !postImageUrl.isEmpty()) {
+            this.postImage.setPostImageUrl(postImageUrl);
+        }
     }
 
+    public void updatePost(LocalDate startDate, LocalDate endDate, String title, String content, String mbti, String place, String postImageUrl) {
 
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.title = title;
+        this.content = content;
+        this.mbti = mbti;
+        this.place = place;
+
+        if (postImageUrl != null && !postImageUrl.isEmpty()) {
+            this.postImage.setPostImageUrl(postImageUrl);
+        }
+    }
 }

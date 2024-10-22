@@ -32,7 +32,9 @@ public enum ErrorCode {
 
     FILE_UPLOAD_FAILED("FILE_UPLOAD_FAILED", "파일 업로드 실패"),
 
-    PARTICIPATION_FAILED("PARTICIPATION_FAILED", "참여 실패");
+    PARTICIPATION_FAILED("PARTICIPATION_FAILED", "참여 실패"),
+
+    NOT_EXIST_PARTICIPATION("NOT_EXIST_PARTICIPATION", "참여해 있는 사용자가 아닙니다.");
 
 
     private final String errorCode;
